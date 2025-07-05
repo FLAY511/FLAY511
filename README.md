@@ -1,16 +1,20 @@
-## Hi there 👋
+# MIENTracker (Private Educational Use Only)
 
-<!--
-**FLAY511/FLAY511** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+MIENTracker adalah simulasi pelacakan nomor telepon untuk edukasi dan penanganan kasus kehilangan HP **dengan izin**. Tidak diperbolehkan menggunakan proyek ini untuk pelacakan orang tanpa persetujuan.
 
-Here are some ideas to get you started:
+## Cara Pakai
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+1. Buka `PELACAK.html` di browser
+2. Masukkan nomor telepon (milik sendiri atau atas izin)
+3. Izinkan akses lokasi jika diminta
+4. Lokasi akan dikirim ke Telegram (jika konfigurasi aktif)
+
+## ⚠️ PERINGATAN
+Proyek ini hanya boleh digunakan untuk:
+- Uji coba pribadi
+- Penanganan kehilangan HP dengan izin pemilik
+
+JANGAN digunakan untuk keperluan ilegal.
+
+---
+**Developer:** M. Rafka Brian S. | 🇮🇩 Tuban, 2025
