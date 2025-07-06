@@ -2,128 +2,63 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>MIENTracker - Hacker Mode with Retry</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MIENTracker</title>
   <style>
-    html, body {
-      margin: 0;
-      padding: 0;
-      background-color: black;
-      color: #00ff00;
-      font-family: 'Courier New', monospace;
-      overflow: hidden;
-    }
-    canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: -1;
-    }
-    #main {
-      text-align: center;
-      margin-top: 50px;
-    }
-    .neon-box {
-      background: rgba(0, 255, 0, 0.1);
-      border: 1px solid #00ff00;
-      padding: 20px;
-      border-radius: 10px;
-      display: inline-block;
-    }
-    input, button {
-      background: black;
-      color: #00ff00;
-      border: 1px solid #00ff00;
-      padding: 10px;
-      font-size: 16px;
-      border-radius: 5px;
-    }
-    button:hover {
-      background: #00ff00;
-      color: black;
-      cursor: pointer;
-    }
+    body { background: #111; color: #0f0; font-family: monospace; text-align: center; padding: 20px; }
+    input, button { padding: 10px; font-size: 16px; }
+    #mapid { height: 300px; margin-top: 20px; }
   </style>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 <body>
-<canvas id="matrix"></canvas>
+  <h1>MIENTracker</h1>
+  <p>Sistem Pelacakan Lokasi via Nomor Telepon</p>
+  <input type="text" id="phone" placeholder="+62xxxxxxxxxxx" /><br><br>
+  <button onclick="track()">Lacak Lokasi</button>
+  <p id="status"></p>
+  <div id="mapid"></div>
+  <p id="coords"></p>
 
-<div id="main">
-  <div class="neon-box">
-    <h2>🌐 Alamat IP Kamu</h2>
-    <p id="ipInfo">Mengambil alamat IP...</p>
-    <hr style="border: 1px dashed #0f0;">
-    <h2>📍 Lokasi Kamu (GPS)</h2>
-    <p id="lokasi">Menunggu izin lokasi...</p>
-    <button onclick="getLocation()">Ambil Lokasi</button>
-  </div>
-</div>
+  <script>
+    function track() {
+      if (!navigator.geolocation) {
+        document.getElementById("status").textContent = "Geolocation tidak didukung.";
+        return;
+      }
 
-<script>
-// IP Detection
-fetch("https://ipinfo.io/json?token=demo")
-  .then(response => response.json())
-  .then(data => {
-    document.getElementById("ipInfo").innerText = "IP: " + data.ip + " (" + data.city + ", " + data.region + ")";
-  })
-  .catch(() => {
-    document.getElementById("ipInfo").innerText = "Gagal mendapatkan alamat IP";
-  });
+      document.getElementById("status").textContent = "Mencari lokasi...";
 
-function getLocation() {
-  const output = document.getElementById("lokasi");
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(showPosition, showError);
-  } else {
-    output.innerText = "Browser tidak mendukung lokasi.";
-  }
-}
-
-function showPosition(position) {
-  const lat = position.coords.latitude.toFixed(5);
-  const lon = position.coords.longitude.toFixed(5);
-  document.getElementById("lokasi").innerText =
-    "Latitude: " + lat + "\nLongitude: " + lon;
-}
-
-function showError(error) {
-  const output = document.getElementById("lokasi");
-  if (error.code === 1) {
-    output.innerText = "⚠️ Akses lokasi ditolak. Silakan izinkan akses lokasi lalu klik tombol di atas untuk mencoba lagi.";
-  } else {
-    output.innerText = "Gagal mendapatkan lokasi: " + error.message;
-  }
-}
-
-// MATRIX EFFECT
-const c = document.getElementById("matrix");
-const ctx = c.getContext("2d");
-c.height = window.innerHeight;
-c.width = window.innerWidth;
-
-const matrix = "01";
-const font_size = 16;
-const columns = c.width / font_size;
-const drops = Array(Math.floor(columns)).fill(1);
-
-function draw() {
-  ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-  ctx.fillRect(0, 0, c.width, c.height);
-  ctx.fillStyle = "#0f0";
-  ctx.font = font_size + "px Courier New";
-
-  for (let i = 0; i < drops.length; i++) {
-    const text = matrix[Math.floor(Math.random() * matrix.length)];
-    ctx.fillText(text, i * font_size, drops[i] * font_size);
-
-    if (drops[i] * font_size > c.height && Math.random() > 0.975) {
-      drops[i] = 0;
+      navigator.geolocation.getCurrentPosition(success, error, {
+        enableHighAccuracy: true,
+        timeout: 10000
+      });
     }
 
-    drops[i]++;
-  }
-}
-setInterval(draw, 33);
-</script>
+    function success(pos) {
+      const lat = pos.coords.latitude;
+      const lon = pos.coords.longitude;
+      const acc = pos.coords.accuracy;
+
+      document.getElementById("status").textContent = "Lokasi ditemukan!";
+
+      document.getElementById("coords").innerHTML = `Latitude: ${lat}<br>Longitude: ${lon}<br>Akurasi: ${acc.toFixed(2)} meter`;
+
+      const map = L.map('mapid').setView([lat, lon], 17);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
+
+      L.marker([lat, lon]).addTo(map)
+        .bindPopup('Lokasi kamu sekarang')
+        .openPopup();
+    }
+
+    function error(err) {
+      document.getElementById("status").textContent = "Gagal menemukan lokasi.";
+    }
+  </script>
 </body>
 </html>
