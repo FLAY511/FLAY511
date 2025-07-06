@@ -1,20 +1,17 @@
-# MIENTracker (Private Educational Use Only)
 
-MIENTracker adalah simulasi pelacakan nomor telepon untuk edukasi dan penanganan kasus kehilangan HP **dengan izin**. Tidak diperbolehkan menggunakan proyek ini untuk pelacakan orang tanpa persetujuan.
+# MIENTracker - PIN SHA256 Protected Version
 
-## Cara Pakai
+Versi ini dilengkapi dengan sistem proteksi PIN SHA-256. Tidak ada PIN asli disimpan dalam file, hanya hash-nya.
 
-1. Buka `PELACAK.html` di browser
-2. Masukkan nomor telepon (milik sendiri atau atas izin)
-3. Izinkan akses lokasi jika diminta
-4. Lokasi akan dikirim ke Telegram (jika konfigurasi aktif)
+## Fitur
+- PIN aman (tidak bisa dilihat dari source code)
+- Tidak perlu backend / server
+- Cocok untuk simulasi pelacakan pribadi
 
-## ⚠️ PERINGATAN
-Proyek ini hanya boleh digunakan untuk:
-- Uji coba pribadi
-- Penanganan kehilangan HP dengan izin pemilik
+## Penggunaan
+1. Buka halaman `index.html` di browser
+2. Masukkan PIN: `flay121211`
+3. Jika benar, konten utama terbuka
+4. Dapat digunakan di GitHub Pages (aktifkan via Settings > Pages)
 
-JANGAN digunakan untuk keperluan ilegal.
-
----
-**Developer:** M. Rafka Brian S. | 🇮🇩 Tuban, 2025
+⚠️ Jangan gunakan untuk melacak orang lain tanpa izin.
